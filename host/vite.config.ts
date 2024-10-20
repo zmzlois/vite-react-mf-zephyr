@@ -30,7 +30,7 @@ const mfConfig = {
   },
 };
 
-// @ts-expect-error would work
+
 export default defineConfig(({ mode }: ConfigEnv) => {
 
   const isDevelopmentMode = mode === 'development';
@@ -38,7 +38,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
   const publicPath = !isDevelopmentMode && isCI ? process.env.PUBLIC_URL ?? '/' : '/'
   return {
     base: publicPath,
-    plugins: [react(), withZephyr({ mfConfig }), viteManifestPlugin({
+    plugins: [react(), withZephyr(mfConfig), viteManifestPlugin({
       fileName: 'asset-manifest-vite.json',
       publicPath: publicPath,
     }),],
@@ -47,7 +47,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
       outDir: '../Supply/wwwroot',
       emptyOutDir: true,
       target: 'esnext',
-      modulePreload: false,
+      // modulePreload: false,
       manifest: 'asset-manifest-vite.json',
       minify: true,
       terserOptions: {
@@ -61,6 +61,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
         format: 'esm',
         entryFileNames: `static/js/main.[hash].js`,
         chunkFileNames: `static/js/[name].[hash].js`,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         assetFileNames: ({ name }: any) => {
           if (name?.indexOf('css') !== -1)
             return `static/css/[name].[hash].css`
